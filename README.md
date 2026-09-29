@@ -107,12 +107,6 @@ Relacionamentos
 
 ---
 
-Diagrama simplificado:
--------------------------------
-<img width="354" height="300" alt="Diagrama sem nome" src="https://github.com/user-attachments/assets/ab65f786-5db5-4048-908c-b45b8b6d999f" />
-
----
-
 Diagrama UML completo:
 --------------------------------
 <img width="601" height="859" alt="image" src="https://github.com/user-attachments/assets/c9c68aef-6861-4622-b25b-c9da1fc9923d" />
