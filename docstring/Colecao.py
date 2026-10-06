@@ -1,24 +1,56 @@
+from datetime import date
+
+from .Publicacao import Publicacao
+
+
 class Colecao:
-    #Classe Representando o tipo de livro e vai herdar características de publicação e avaliação() de avaliável
+    """Agrupa publicações e oferece operações de busca e filtragem."""
 
+    def __init__(self, publicacoes: list[Publicacao] | None = None):
+        self._publicacoes = list(publicacoes) if publicacoes is not None else []
 
-    def adicionar(self, publicacao):
-        pass
+    @property
+    def publicacoes(self):
+        return self.listar()
 
-    def remover(self, publicacao):
-        pass
+    def adicionar(self, publicacao: Publicacao):
+        self._publicacoes.append(publicacao)
+
+    def remover(self, publicacao: Publicacao):
+        self._publicacoes.remove(publicacao)
 
     def listar(self):
-        pass
+        return self._publicacoes.copy()
 
-    def buscar(self, termo):
-        pass
+    def buscar(self, termo: str):
+        termo = termo.casefold()
+        return [
+            publicacao
+            for publicacao in self._publicacoes
+            if termo in publicacao.titulo.casefold()
+            or termo in publicacao.autor.casefold()
+        ]
 
-    def filtrar_por_status(self, status):
-        pass
+    def filtrar_por_status(self, status: str):
+        return [
+            publicacao
+            for publicacao in self._publicacoes
+            if publicacao.status == status
+        ]
 
-    def filtrar_por_genero(self, genero):
-        pass
+    def filtrar_por_genero(self, genero: str):
+        genero = genero.casefold()
+        return [
+            publicacao
+            for publicacao in self._publicacoes
+            if publicacao.genero.casefold() == genero
+        ]
 
-    def filtrar_por_periodo(self, inicio, fim):
-        pass
+    def filtrar_por_periodo(
+        self, inicio: date, fim: date
+    ):
+        return [
+            publicacao
+            for publicacao in self._publicacoes
+            if inicio <= publicacao.data_inclusao <= fim
+        ]
