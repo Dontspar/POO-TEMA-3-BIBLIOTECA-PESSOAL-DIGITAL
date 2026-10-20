@@ -24,19 +24,18 @@ Atributos:
 
 
 from abc import ABC, abstractmethod
-from datetime import date, time, dt
+from datetime import date
 
 from .Anotacao import Anotacao
 
 
-def data_atual() -> date:
-    return date.today(dt.strftime("%Y-%m-%d %H:%M"))
-
+def data_atual():
+    return date.today()
 
 
 
 class Publicacao(ABC):
-
+    
     def __init__(
         self,
         titulo: str,
@@ -48,8 +47,8 @@ class Publicacao(ABC):
         data_inclusao: date | None = None,
         data_inicio: date | None = None,
         data_termino: date | None = None,
-        anotacoes: list[Anotacao] | None = None,
-    ): 
+        anotacoes: list[Anotacao] | None = None
+        ): 
         self._titulo = titulo
         self._autor = autor
         self._ano = ano
@@ -142,7 +141,10 @@ class Publicacao(ABC):
 
     @abstractmethod
     def __str__(self):
-        raise NotImplementedError
+        return (
+            f"título: {self.titulo}; gênero: {self.genero}; ano de publicação: {self.ano};"
+            f"autor: {self.autor}; Usuário está {self.status} a obra."
+        )
 
     def __repr__(self):
         return (
@@ -150,13 +152,28 @@ class Publicacao(ABC):
             f"autor={self.autor!r}, ano={self.ano!r})"
         )
 
+    def ordenar(self, list_anos):
+        self.list_anos = list_anos
+        tamanho = len(self.list_anos)
+
+        for i in range(tamanho):
+            for j in range(tamanho - 1 - i):
+
+                if self.list_anos[j] > self.list_anos[j + 1]:
+                    self.list_anos[j], self.list_anos[j + 1] = self.list_anos[j + 1], self.list_anos[j]
+
+        return self.list_anos
+
+
+
+
     def __lt__(self, outra: object):
         if not isinstance(outra, Publicacao):
             return NotImplemented
         return (self.titulo.casefold(), self.ano) < (
             outra.titulo.casefold(),
             outra.ano,
-        )
+        )  
 
     def __eq__(self, outra: object):
         if not isinstance(outra, Publicacao):
@@ -167,3 +184,4 @@ class Publicacao(ABC):
             and self.autor == outra.autor
             and self.ano == outra.ano
         )
+

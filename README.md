@@ -11,6 +11,10 @@ O projeto consiste no desenvolvimento de um sistema de linha de comando (CLI) ou
 - Disponibilizar relatórios e filtros para facilitar o gerenciamento do acervo.
 - Utilizar persistência de dados por meio de JSON ou SQLite, mantendo-a separada da lógica do sistema.
 
+## Como iniciar
+- Execute o main.py dentro 
+
+
 ---
 
 #  UML textual
@@ -98,18 +102,100 @@ Métodos:
 + filtrar_por_periodo(inicio, fim): list[Publicacao]
 + listar(): list[Publicacao]
 
+---
+
+CLASSE: ArmazenamentoJSON (persistência)
+--------------------------------
+
+Atributos:
+- caminho: Path
+
+Métodos:
++ __init__(caminho: str | Path): void
++ salvar(colecao: Colecao): void
++ carregar(): list[Publicacao]
+- _para_dict(publicacao: Publicacao): dict
+- _para_publicacao(dados: dict): Publicacao
+
 Relacionamentos
 ---------------------------------
 - `Livro` e `Revista` herdam de `Publicacao`.
 - `Livro` e `Revista` também herdam de `Avaliavel`, caracterizando herança múltipla.
 - Uma `Publicacao` pode possuir zero ou várias `Anotacao`.
 - Uma `Colecao` pode agrupar zero ou várias `Publicacao`.
+- `ArmazenamentoJSON` salva e carrega uma `Colecao` no arquivo JSON; ele depende da coleção e converte `Livro` e `Revista` para/de dicionários.
 
 ---
 
-Diagrama UML completo:
+Diagrama UML atualizado:
 --------------------------------
-<img width="601" height="859" alt="image" src="https://github.com/user-attachments/assets/c9c68aef-6861-4622-b25b-c9da1fc9923d" />
+
+```mermaid
+classDiagram
+    class Publicacao {
+        <<abstract>>
+        +titulo: str
+        +autor: str
+        +ano: int
+        +genero: str
+        +paginas: int
+        +status: str
+        +data_inclusao: date
+        +data_inicio: date
+        +data_termino: date
+        +iniciar_leitura()
+        +concluir_leitura()
+        +adicionar_anotacao(anotacao)
+        +listar_anotacoes()
+    }
+    class Livro {
+        +editora: str
+        +isbn: str
+    }
+    class Revista {
+        +edicao: int
+        +periodicidade: str
+    }
+    class Avaliavel {
+        <<mixin>>
+        +avaliacao: float
+        +avaliar(nota)
+    }
+    class Anotacao {
+        +texto: str
+        +data: date
+        +trecho: str
+    }
+    class Colecao {
+        -publicacoes: list~Publicacao~
+        +adicionar(publicacao)
+        +remover(publicacao)
+        +listar()
+        +buscar(termo)
+        +filtrar_por_status(status)
+        +filtrar_por_genero(genero)
+        +filtrar_por_periodo(inicio, fim)
+    }
+    class ArmazenamentoJSON {
+        <<persistência>>
+        -caminho: Path
+        +__init__(caminho)
+        +salvar(colecao: Colecao)
+        +carregar(): list~Publicacao~
+        -_para_dict(publicacao): dict
+        -_para_publicacao(dados): Publicacao
+    }
+
+    Publicacao <|-- Livro
+    Publicacao <|-- Revista
+    Avaliavel <|.. Livro
+    Avaliavel <|.. Revista
+    Publicacao "1" *-- "0..*" Anotacao
+    Colecao "1" o-- "0..*" Publicacao
+    ArmazenamentoJSON ..> Colecao : salva/carrega
+    ArmazenamentoJSON ..> Livro : serializa
+    ArmazenamentoJSON ..> Revista : serializa
+```
 
 
 
