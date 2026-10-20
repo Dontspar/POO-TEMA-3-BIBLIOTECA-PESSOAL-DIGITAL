@@ -1,0 +1,40 @@
+[
+  {
+    "tipo": "Livro",
+    "titulo": "Ensaio sobre a Cegueira",
+    "autor": "José Saramago",
+    "ano": 1995,
+    "genero": "Romance",
+    "paginas": 312,
+    "status": "Lendo",
+    "data_inclusao": "2026-10-20",
+    "data_inicio": "2026-10-20",
+    "data_termino": null,
+    "anotacoes": [
+      {
+        "texto": "Trecho de exemplo",
+        "data": "2026-10-20",
+        "trecho": "A cidade"
+      }
+    ],
+    "avaliacao": 4.5,
+    "editora": "Companhia das Letras",
+    "isbn": "978-85-359-0277-5"
+  },
+  {
+    "tipo": "Revista",
+    "titulo": "Ciência Hoje",
+    "autor": "Vários autores",
+    "ano": 2025,
+    "genero": "Ciência",
+    "paginas": 80,
+    "status": "Não lido",
+    "data_inclusao": "2026-10-20",
+    "data_inicio": null,
+    "data_termino": null,
+    "anotacoes": [],
+    "avaliacao": 5.0,
+    "edicao": 400,
+    "periodicidade": "Mensal"
+  }
+]

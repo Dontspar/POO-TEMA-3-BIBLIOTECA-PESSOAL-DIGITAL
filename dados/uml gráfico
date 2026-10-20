@@ -1,0 +1,19 @@
+Diagrama UML completo:
+--------------------------------
+<img width="601" height="859" alt="image" src="https://github.com/user-attachments/assets/c9c68aef-6861-4622-b25b-c9da1fc9923d" />
+
+Classe adicionada ao diagrama:
+--------------------------------
+
+ArmazenamentoJSON
+- caminho: Path
++ salvar(colecao: Colecao): void
++ carregar(): list[Publicacao]
+- _para_dict(publicacao: Publicacao): dict
+- _para_publicacao(dados: dict): Publicacao
+
+Relacionamento:
+- ArmazenamentoJSON depende de Colecao para salvar e carregar publicações.
+- ArmazenamentoJSON converte Livro e Revista para/de dicionários JSON.
+
+O diagrama Mermaid atualizado e renderizável está na seção "Diagrama UML atualizado" do README.md.
