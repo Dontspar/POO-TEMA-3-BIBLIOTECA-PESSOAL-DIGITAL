@@ -1,14 +1,18 @@
+"""Persistência do acervo em arquivos JSON."""
+
 import json
 from datetime import date
 from pathlib import Path
 
-from .Anotacao import Anotacao
-from .Livro import Livro
-from .Revista import Revista
+from ..dominio.anotacao import Anotacao
+from ..dominio.livro import Livro
+from ..dominio.revista import Revista
 
 
 class ArmazenamentoJSON:
-    def __init__(self, caminho="banco_de_dados/biblioteca.json"):
+    """Carrega e salva publicações, convertendo-as para o formato JSON."""
+
+    def __init__(self, caminho="scr/banco_de_dados/biblioteca.json"):
         self.caminho = Path(caminho)
 
     def salvar(self, colecao):
@@ -27,6 +31,8 @@ class ArmazenamentoJSON:
 
         # Um arquivo vazio equivale a uma biblioteca ainda sem publicações.
         dados = json.loads(conteudo) if conteudo else []
+        if not isinstance(dados, list):
+            raise ValueError("O arquivo do acervo deve conter uma lista JSON")
 
         return [self._para_publicacao(item) for item in dados]
 
@@ -61,13 +67,21 @@ class ArmazenamentoJSON:
         return dados
 
     def _para_publicacao(self, item):
+        if not isinstance(item, dict):
+            raise ValueError("Cada publicação do acervo deve ser um objeto JSON")
+        for campo in ("tipo", "titulo", "autor", "ano", "genero", "paginas"):
+            if campo not in item:
+                raise ValueError(
+                    f"Campo obrigatório ausente no arquivo do acervo: {campo}"
+                )
+
         anotacoes = [
             Anotacao(
                 texto=a["texto"],
-                data=date.fromisoformat(a["data"]),
-                trecho=a["trecho"],
+                data=date.fromisoformat(a["data"]) if a.get("data") else date.today(),
+                trecho=a.get("trecho"),
             )
-            for a in item["anotacoes"]
+            for a in item.get("anotacoes", [])
         ]
 
         comuns = {
@@ -76,31 +90,39 @@ class ArmazenamentoJSON:
             "ano": item["ano"],
             "genero": item["genero"],
             "paginas": item["paginas"],
-            "status": item["status"],
-            "data_inclusao": date.fromisoformat(item["data_inclusao"]),
+            "status": item.get("status", "NÃO LIDO"),
+            "data_inclusao": date.fromisoformat(item["data_inclusao"]) if item.get("data_inclusao") else date.today(),
             "data_inicio": (
                 date.fromisoformat(item["data_inicio"])
-                if item["data_inicio"] else None
+                if item.get("data_inicio") else None
             ),
             "data_termino": (
                 date.fromisoformat(item["data_termino"])
-                if item["data_termino"] else None
+                if item.get("data_termino") else None
             ),
             "anotacoes": anotacoes,
         }
 
-        if item["tipo"] == "Livro":
-            publicacao = Livro(**comuns, editora=item["editora"], isbn=item["isbn"])
-        elif item["tipo"] == "Revista":
-            publicacao = Revista(
-                **comuns,
-                edicao=item["edicao"],
-                periodicidade=item["periodicidade"],
-            )
-        else:
-            raise ValueError(f"Tipo de publicação desconhecido: {item['tipo']}")
+        tipo = item.get("tipo")
+        try:
+            if tipo == "Livro":
+                publicacao = Livro(
+                    **comuns, editora=item["editora"], isbn=item["isbn"]
+                )
+            elif tipo == "Revista":
+                publicacao = Revista(
+                    **comuns,
+                    edicao=item["edicao"],
+                    periodicidade=item["periodicidade"],
+                )
+            else:
+                raise ValueError(f"Tipo de publicação desconhecido: {tipo}")
+        except KeyError as erro:
+            raise ValueError(
+                f"Campo obrigatório ausente no arquivo do acervo: {erro.args[0]}"
+            ) from None
 
         avaliacao = item.get("avaliacao")
-        if avaliacao is not None:
+        if avaliacao is not None and publicacao.status == "LIDO":
             publicacao.avaliar(avaliacao)
         return publicacao

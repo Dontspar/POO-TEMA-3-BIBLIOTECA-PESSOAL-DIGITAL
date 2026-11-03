@@ -1,44 +1,14 @@
-"""         Classe Livro """
-""" Classe característica de livros.
-Atributos:
-        exclusivos:
-        editora
-        isbn
-        super init de outros: 
-        titulo,
-        autor,
-        ano,
-        genero,
-        paginas,
-        status,
-        data_inclusao,
-        data_inicio,
-        data_termino,
-        anotacoes,
-        Avaliavel
-
-        Todos com @property e @setter
-
-        imports de:
-        datetime - pegar o tempo atual
-        Anotação - Pergar anotações
-        Avaliável - Pegar avaliação
-        Publicação - Pegar atributos
-
-    Falta tipificar algumas coisas como os returns
-"""
+"""Modelo de livro do acervo."""
 
 from datetime import date
 
-from .Anotacao import Anotacao
-from .Avaliavel import Avaliavel
-from .Publicacao import Publicacao
+from .anotacao import Anotacao
+from .avaliavel import Avaliavel
+from .publicacao import Publicacao
 
 
 class Livro(Publicacao, Avaliavel):
-    """atributos: 
-            editora
-            isbn ."""
+    """Publicação do tipo livro, com editora e ISBN."""
 
     def __init__(
         self,
