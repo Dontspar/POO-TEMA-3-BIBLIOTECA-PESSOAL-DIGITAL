@@ -88,7 +88,17 @@ class Publicacao(ABC):
             raise ValueError("Inicie a leitura antes de marcar como LIDO")
         if novo == STATUS_LENDO and getattr(self, "_data_inicio", None) is None:
             self._data_inicio = date.today()
-        if novo == STATUS_NAO_LIDO and getattr(self, "_status", None) == STATUS_LENDO:
+        if novo == STATUS_LENDO and getattr(self, "_status", None) == STATUS_LIDO:
+            if hasattr(self, "_avaliacao"):
+                self._avaliacao = None
+        if novo == STATUS_NAO_LIDO:
+            self._data_inicio = None
+            self._data_termino = None
+            # Uma avaliação pertence à leitura concluída, não à publicação
+            # indefinidamente. Removê-la evita reutilizar uma nota antiga.
+            if hasattr(self, "_avaliacao"):
+                self._avaliacao = None
+        elif novo == STATUS_LENDO:
             self._data_termino = None
         if novo == STATUS_LIDO:
             self._data_termino = getattr(self, "_data_termino", None) or date.today()
@@ -107,6 +117,8 @@ class Publicacao(ABC):
         if self.status == STATUS_LENDO: return
         self._data_inicio = date.today()
         self._data_termino = None
+        if hasattr(self, "_avaliacao"):
+            self._avaliacao = None
         self._status = STATUS_LENDO
 
     def concluir_leitura(self):

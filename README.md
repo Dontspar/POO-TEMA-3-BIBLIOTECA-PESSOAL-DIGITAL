@@ -171,11 +171,11 @@ config:
   themeVariables:
     fontFamily: Inter, Arial, sans-serif
     fontSize: 15px
-    lineColor: '#64748b'
-    primaryTextColor: '#172033'
-    secondaryTextColor: '#334155'
-    tertiaryTextColor: '#475569'
-    background: '#ffffff'
+    lineColor: '#94a3b8'
+    primaryTextColor: '#f8fafc'
+    secondaryTextColor: '#cbd5e1'
+    tertiaryTextColor: '#94a3b8'
+    background: '#0f172a'
 ---
 classDiagram
     direction TB
@@ -267,6 +267,14 @@ classDiagram
         +carregar_publicacoes(caminho)
     }
 
+    class Legenda {
+        DOMINIO: azul
+        SERVICO: verde
+        PERSISTENCIA: dourado
+        MODULO: roxo
+    }
+    class Legenda legenda
+
     Livro --|> Publicacao
     Revista --|> Publicacao
     Livro ..|> Avaliavel
@@ -284,23 +292,12 @@ classDiagram
     ArmazenamentoJSON ..> Revista : reconstrói
     Dados ..> ArmazenamentoJSON : reutiliza
 
-    classDef dominio fill:#e8f1ff,stroke:#3973ac,stroke-width:2px,color:#172033
-    classDef servico fill:#e8f7ed,stroke:#378455,stroke-width:2px,color:#172033
-    classDef persistencia fill:#fff3dd,stroke:#c2851c,stroke-width:2px,color:#172033
-    classDef modulo fill:#f4eaff,stroke:#8755a4,stroke-width:2.5px,color:#172033
-    class Publicacao dominio
-    class Livro dominio
-    class Revista dominio
-    class Avaliavel dominio
-    class Anotacao dominio
-    class Colecao servico
-    class Configuracoes servico
-    class RelatorioStatus servico
-    class RelatorioAvaliacoes servico
-    class RelatorioAnual servico
-    class ArmazenamentoJSON persistencia
-    class CLI modulo
-    class Dados modulo
+    classDef dominio fill:#1e3a5f,stroke:#60a5fa,stroke-width:2px,color:#eff6ff
+    classDef servico fill:#14532d,stroke:#4ade80,stroke-width:2px,color:#f0fdf4
+    classDef persistencia fill:#713f12,stroke:#fbbf24,stroke-width:2px,color:#fffbeb
+    classDef modulo fill:#581c87,stroke:#c084fc,stroke-width:2.5px,color:#faf5ff
+    classDef legenda fill:#1e293b,stroke:#cbd5e1,stroke-width:2px,color:#f8fafc
+
 ```
 
 ## Testes
@@ -314,4 +311,10 @@ python -m pytest
 
 A suíte cobre validações, transições de leitura, avaliações, anotações, duplicidade, filtros, relatórios, limites simultâneos, configurações e persistência.
 
+``` 
+Foram executados 26 testes: todos passaram.
+```
 Os itens “expiração”, “devolução” e “cálculo de taxa/compatibilidade” do enunciado não pertencem ao domínio descrito: esta biblioteca não controla empréstimos nem cobranças.
+
+### Autoria
+Desenvolvido por Tadeu Coêlho de Vasconcelos
