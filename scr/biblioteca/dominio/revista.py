@@ -1,40 +1,14 @@
-"""         Classe Revista """
-""" Representa uma revista da biblioteca.
-Atributos do superinit:
-        titulo: str,
-        autor: str,
-        ano: int,
-        genero: str,
-        paginas: int,
-        status: str = "Não lido",
-        data_inclusao: date | None = None,
-        data_inicio: date | None = None,
-        data_termino: date | None = None,
-        anotacoes: list[Anotacao] | None = None
-
-        + os métodos da Classe avaliável:
-
-        Atributos prórprios:
-        self._edicao = edicao
-        self._periodicidade = periodicidade
-
-
-        Todos com @property e @setter
-
-
-    Falta tipificar algumas coisas como os returns e os de avaliável
-"""
-
+"""Modelo de revista do acervo."""
 
 from datetime import date
 
-from .Anotacao import Anotacao
-from .Avaliavel import Avaliavel
-from .Publicacao import Publicacao
+from .anotacao import Anotacao
+from .avaliavel import Avaliavel
+from .publicacao import Publicacao
 
 
 class Revista(Publicacao, Avaliavel):
-    """Representa uma revista da biblioteca."""
+    """Publicação periódica, com número de edição e periodicidade."""
 
     def __init__(
         self,

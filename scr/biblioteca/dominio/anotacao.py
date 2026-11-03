@@ -2,10 +2,7 @@ from datetime import date
 
 
 class Anotacao:
-    """Representa uma anotação associada a uma publicação.
-    Init: atributos:
-    texto, data do datetime, trecho da publicacao
-    """
+    """Anotação com texto, data de registro e trecho opcional."""
 
     def __init__(
         self, texto: str, data: date | None = None, trecho: str | None = None

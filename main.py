@@ -1,11 +1,11 @@
-from scr.Colecao import Colecao
-from scr.Persistência import ArmazenamentoJSON
+"""Ponto de entrada da CLI da biblioteca."""
 
-def carregar_biblioteca(caminho="banco_de_dados/biblioteca.json"):
-    repositorio = ArmazenamentoJSON(caminho)
-    return repositorio, Colecao(repositorio.carregar())
+from scr.biblioteca.cli import executar
 
 
 if __name__ == "__main__":
-    repositorio, colecao = carregar_biblioteca()
-    print(f"Biblioteca carregada: {len(colecao.listar())} publicação(ões).")
+    try:
+        executar()
+    except (TypeError, ValueError) as erro:
+        # Exibe erros de entrada sem um traceback para quem usa a CLI.
+        raise SystemExit(f"Erro: {erro}")
